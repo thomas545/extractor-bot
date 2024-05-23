@@ -1,15 +1,17 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from repositories.users import UserRepository
 from core.logger import logger
 from core.auth import create_access_token, verify_password
 from models.users import UserLogin, UserRequest, UserResponse
+from core.rate_limiter import limiter
 
 
 routers = APIRouter(prefix="/users/auth", tags=["auth"])
 
 
 @routers.post("/signup/", response_model=UserResponse)
-async def signup(req: UserRequest):
+@limiter.limit("3/minute")
+async def signup(request: Request, req: UserRequest):
     user_repo = UserRepository()
 
     if user_repo.get_obj({"email": req.email}):
@@ -29,7 +31,8 @@ async def signup(req: UserRequest):
 
 
 @routers.post("/login/", response_model=UserResponse)
-async def login(user: UserLogin):
+@limiter.limit("3/minute")
+async def login(request: Request, user: UserLogin):
     user_repo = UserRepository()
     email = user.email
     password = user.password
