@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from repositories.users import UserRepository
+from core.logger import logger
 from core.auth import create_access_token, verify_password
 from models.users import UserLogin, UserRequest, UserResponse
 
@@ -20,6 +21,8 @@ async def signup(req: UserRequest):
         user_json["_id"] = user_id
         user_json["access_token"] = create_access_token(user_json)
     except Exception as exc:
+        logger.log("Signup Error ->> ", exc.args)
+        logger.log_exc(exc)
         raise HTTPException(400, exc.args)
 
     return UserResponse(**user_json)
