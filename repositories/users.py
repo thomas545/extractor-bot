@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from core.logger import logger
 from core.auth import hash_password
-from models.users import User, USER_COLLECTION
+from models.users import USER_COLLECTION
 from infrastructure.mongodb import Client
 
 

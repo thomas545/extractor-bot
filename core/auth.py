@@ -1,16 +1,14 @@
-import os
 from typing import Annotated
 from jose import JWTError, jwt
-from dotenv import load_dotenv
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from models.users import User, UserResponse
+from core.logger import logger
 from core.environment import get_environ
+from models.users import User, UserResponse
 
-load_dotenv()
 
 SECRET_KEY = get_environ("SECRET_KEY")
 ALGORITHM = get_environ("ALGORITHM")
@@ -33,7 +31,9 @@ def create_access_token(data: dict):
         expire = datetime.now(timezone.utc) + timedelta(days=ACCESS_TOKEN_EXPIRE_DAYS)
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)  # type: ignore
-    except Exception:
+    except Exception as exc:
+        logger.log("Create JWT Token Error ->> ", exc.args)
+        logger.log_exc(exc)
         raise HTTPException(403, "Error while creating access token")
     return encoded_jwt
 
@@ -46,7 +46,9 @@ def verify_access_token(token: str = "", payload: dict = {}):
         expire_date = datetime.fromtimestamp(payload.get("exp")).astimezone(
             tz=timezone.utc
         )
-    except JWTError:
+    except JWTError as exc:
+        logger.log("Verify JWT Token Error ->> ", exc.args)
+        logger.log_exc(exc)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalide token"
         )
@@ -67,7 +69,9 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])  # type: ignore
-    except JWTError:
+    except JWTError as exc:
+        logger.log("Get Current User In JWT Token Error ->> ", exc.args)
+        logger.log_exc(exc)
         raise credentials_exception
 
     verify_access_token(payload=payload)
@@ -78,7 +82,9 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
 
         if not user:
             raise credentials_exception
-    except Exception:
+    except Exception as exc:
+        logger.log("Get Current User Error ->> ", exc.args)
+        logger.log_exc(exc)
         raise credentials_exception
 
     return UserResponse(**user)
