@@ -1,15 +1,16 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, status
 from repositories.users import UserRepository
 from core.logger import logger
 from core.auth import create_access_token, verify_password
 from models.users import UserLogin, UserRequest, UserResponse
 from core.rate_limiter import limiter
+from core.responses import responsify
 
 
 routers = APIRouter(prefix="/users/auth", tags=["auth"])
 
 
-@routers.post("/signup/", response_model=UserResponse)
+@routers.post("/signup/", response_model=UserResponse, status_code=status.HTTP_200_OK)
 @limiter.limit("3/minute")
 async def signup(request: Request, req: UserRequest):
     user_repo = UserRepository()
@@ -27,10 +28,10 @@ async def signup(request: Request, req: UserRequest):
         logger.log_exc(exc)
         raise HTTPException(400, exc.args)
 
-    return UserResponse(**user_json)
+    return responsify(data=UserResponse(**user_json), status_code=status.HTTP_200_OK)
 
 
-@routers.post("/login/", response_model=UserResponse)
+@routers.post("/login/", response_model=UserResponse, status_code=status.HTTP_200_OK)
 @limiter.limit("3/minute")
 async def login(request: Request, user: UserLogin):
     user_repo = UserRepository()
@@ -45,4 +46,4 @@ async def login(request: Request, user: UserLogin):
         raise HTTPException(401, "Account is inactive")
 
     db_user["access_token"] = create_access_token(db_user)
-    return db_user
+    return responsify(data=db_user, status_code=status.HTTP_200_OK)
