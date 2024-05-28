@@ -26,7 +26,7 @@ class FileRepository:
                 obj["_id"] = str(obj["_id"])
         except Exception as exc:
             logger.log_exc(exc)
-            obj = None
+            obj = {}
             if raise_exc:
                 raise HTTPException(500, "Error while get file, try again")
         return obj

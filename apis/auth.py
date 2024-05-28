@@ -7,10 +7,10 @@ from core.rate_limiter import limiter
 from core.responses import responsify
 
 
-routers = APIRouter(prefix="/users/auth", tags=["auth"])
+routers = APIRouter(prefix="/auth", tags=["auth"])
 
 
-@routers.post("/signup/", response_model=UserResponse, status_code=status.HTTP_200_OK)
+@routers.post("/signup/", status_code=status.HTTP_200_OK)
 @limiter.limit("3/minute")
 async def signup(request: Request, req: UserRequest):
     user_repo = UserRepository()
@@ -31,7 +31,7 @@ async def signup(request: Request, req: UserRequest):
     return responsify(data=UserResponse(**user_json), status_code=status.HTTP_200_OK)
 
 
-@routers.post("/login/", response_model=UserResponse, status_code=status.HTTP_200_OK)
+@routers.post("/login/", status_code=status.HTTP_200_OK)
 @limiter.limit("3/minute")
 async def login(request: Request, user: UserLogin):
     user_repo = UserRepository()
