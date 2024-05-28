@@ -14,7 +14,7 @@ routers = APIRouter(prefix="", tags=["ocr"])
 
 @routers.post("/ocr/", status_code=status.HTTP_200_OK)
 @limiter.limit("10/minute")
-async def upload_file_api(
+async def ocr_api(
     request: Request,
     ocr: OcrRequestModel,
     user: Annotated[UserResponse, Depends(get_current_active_user)],

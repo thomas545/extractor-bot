@@ -12,7 +12,7 @@ routers = APIRouter(prefix="/auth", tags=["auth"])
 
 @routers.post("/signup/", status_code=status.HTTP_200_OK)
 @limiter.limit("3/minute")
-async def signup(request: Request, req: UserRequest):
+async def signup_api(request: Request, req: UserRequest):
     user_repo = UserRepository()
 
     if user_repo.get_obj({"email": req.email}):
@@ -33,7 +33,7 @@ async def signup(request: Request, req: UserRequest):
 
 @routers.post("/login/", status_code=status.HTTP_200_OK)
 @limiter.limit("3/minute")
-async def login(request: Request, user: UserLogin):
+async def login_api(request: Request, user: UserLogin):
     user_repo = UserRepository()
     email = user.email
     password = user.password
