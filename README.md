@@ -13,7 +13,7 @@
   - Add `.env` file with your secret keys that in `env_dev`
 
 - Run project
-  - Run: `uvicorn main:app --host 0.0.0.0 --port 8000 --reload` or `python main.py`
+  - Run: `uvicorn main:app --host 0.0.0.0 --port 8000 --reload` or `fastapi run`
 
 ## API Documentation
 - [Local Docs](http://127.0.0.1:8000/docs)
