@@ -4,7 +4,7 @@ from langchain_core.embeddings import Embeddings
 from infrastructure.vectordb import MilvusClient
 
 
-COLLECTION_NAME = "extractor"
+COLLECTION_NAME = "extraction"
 
 
 def create_retrievers(
