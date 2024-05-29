@@ -16,8 +16,6 @@ class UserRepository:
             user_obj = None
             if raise_exc:
                 raise HTTPException(500, "Error while get user, try again")
-
-
         return user_obj
 
     def create(self, data):

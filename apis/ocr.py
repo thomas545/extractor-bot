@@ -21,12 +21,8 @@ async def ocr_api(
     background_tasks: BackgroundTasks,
 ):
     """
-    Upload Files to Object Storage
-
-    Parameters
-    ----------
-    files : File
-        list of files.
+    Process OCR results with embedding models,
+    then upload the embeddings to a vector db for future searches.
     """
 
     logger.log("Ocr Request -->> ", ocr)

@@ -11,10 +11,14 @@ ACCEPTED_CONTENT_TYPES = ["application/pdf", "image/tiff", "image/png", "image/j
 
 
 def get_file_object(obj_id: str) -> OcrObjectMapper:
-    file_repo = FileRepository()
-    # file_obj = file_repo.get_obj({"_id": "6654c225e8769fc30206f225"})
-    file_obj = OcrObjectMapper(**file_repo.get_obj({"_id": ObjectId(obj_id)}))
-    logger.log("File Object -->> ", file_obj)
+    try:
+        file_repo = FileRepository()
+        # file_obj = file_repo.get_obj({"_id": "6654c225e8769fc30206f225"})
+        file_obj = OcrObjectMapper(**file_repo.get_obj({"_id": ObjectId(obj_id)}))
+        logger.log("File Object -->> ", file_obj)
+    except Exception as exc:
+        logger.log_exc(exc)
+        raise HTTPException(status_code=404, detail="File if not found")
     return file_obj
 
 

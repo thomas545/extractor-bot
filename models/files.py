@@ -1,5 +1,5 @@
 from typing import Optional, Any
-from datetime import datetime, timezone
+from datetime import datetime
 from pydantic import BaseModel, Field, field_serializer
 
 FILES_COLLECTION = "files"

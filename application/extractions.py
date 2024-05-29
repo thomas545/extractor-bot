@@ -15,7 +15,7 @@ def extractor(extraction, user):
         logger.log("extraction_obj -->> ", extraction_obj)
 
         if not extraction_obj:
-            extraction.response = run_rag(extraction.query)
+            extraction.response = run_rag_chain(extraction.query)
             logger.log("llm_response -->> ", extraction.response)
 
             extraction_to_dict = extraction.model_dump()
