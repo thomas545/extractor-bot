@@ -2,16 +2,14 @@ from fastapi import HTTPException
 from core.logger import logger
 from models.files import FILES_COLLECTION
 from infrastructure.mongodb import Client
+from core.utils import covert_object_id_to_str_for_list
 
 
 class FileRepository:
     def get_list(self, query, raise_exc=True):
         try:
             objs = Client.find(FILES_COLLECTION, query)
-
-            if objs:
-                for obj in objs:
-                    obj["_id"] = str(obj["_id"])
+            objs = covert_object_id_to_str_for_list(objs)
         except Exception as exc:
             logger.log_exc(exc)
             obj = None
