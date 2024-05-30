@@ -15,6 +15,11 @@
 - Run project
   - Run: `uvicorn main:app --host 0.0.0.0 --port 8000 --reload` or `fastapi run`
 
+- Run by Docker:
+  - Build: `docker build -t extractor-app .`
+  - Run: `docker run -p 8000:8000 extractor-app`
+
+
 ## API Documentation
 - [Local Docs](http://127.0.0.1:8000/docs)
 
