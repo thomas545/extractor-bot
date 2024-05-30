@@ -3,13 +3,14 @@ from main import app
 
 client = TestClient(app)
 
-body = {"email": "test@gmail.com", "password": "123456thomas"}
-response = client.post("/auth/login/", json=body, headers=get_headers())
-access_token = response.json().get("data", {}).get("access_token", "")
-
 
 def get_headers():
     return {"Content-Type": "application/json"}
+
+
+body = {"email": "test@gmail.com", "password": "123456thomas"}
+response = client.post("/auth/login/", json=body, headers=get_headers())
+access_token = response.json().get("data", {}).get("access_token", "")
 
 
 def test_upload_api():
