@@ -29,7 +29,7 @@ async def ocr_api(
     if not ocr.file_id and not ocr.url:
         raise HTTPException(400, "File id or url is required")
 
-    file_obj = get_file_object(str(ocr.file_id))
+    file_obj = get_file_object(ocr.file_id, ocr.url) # type: ignore
     background_tasks.add_task(ocr_processor_task, file_obj)
 
     return responsify(

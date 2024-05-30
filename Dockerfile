@@ -15,6 +15,7 @@ EXPOSE 8000
 
 # Copy the application code to the working directory
 COPY . .
+RUN cp env_dev .env
 
 # Run App
 CMD ["fastapi", "run", "main.py", "--port", "8000"]
