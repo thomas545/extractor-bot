@@ -13,7 +13,7 @@ routers = APIRouter(prefix="", tags=["ocr"])
 
 
 @routers.post("/extract/", status_code=status.HTTP_200_OK)
-@limiter.limit("100/minute")
+@limiter.limit("120/minute")
 async def extract_api(
     request: Request,
     extraction: ExtractionRequestModel,
